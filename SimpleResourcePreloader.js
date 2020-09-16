@@ -27,6 +27,7 @@ module.exports = class SimpleResourcePreloader {
     }
 
     load(uri) {
+        this.log('load');
         const xhr = new XMLHttpRequest();
         xhr.onprogress = e => {
             this.updateSizes(e, uri);
@@ -76,6 +77,7 @@ module.exports = class SimpleResourcePreloader {
             count = this.options.files.length;
 
         if (keys.length === count) {
+            this.log('calc percents');
             let total = 0,
                 loaded = 0;
 
@@ -100,12 +102,14 @@ module.exports = class SimpleResourcePreloader {
     }
 
     preload() {
+        this.log('start preload');
         if (this.validate()) {
             this.files.forEach(uri => this.load(uri));
         }
     }
 
     validate() {
+        this.log('validate');
         if (this.count === 0) {
             this.error = new Error('No files to preload');
             this.resolveEvents();
