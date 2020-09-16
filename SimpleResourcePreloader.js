@@ -47,7 +47,7 @@ module.exports = class SimpleResourcePreloader {
                 this.loaded++;
             } else {
                 this.noAccess++;
-                this.error = new Error(`Can't Access "${uri}". Status code ${status}`);
+                this.error = new Error(`Can't Access "${uri}". Status code ${target.status}`);
             }
             if (this.loaded + this.noAccess === this.count) {
                 this.resolveEvents();
