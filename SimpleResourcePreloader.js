@@ -37,7 +37,7 @@ module.exports = class SimpleResourcePreloader {
                 if (this.options.events && this.options.events !== 'false') {
                     this.triggerEvent(this.options.eventPercent, {value: percents});
                 }
-                this.onPercent(...this.onPercentParams);
+                this.onPercent(percents, ...this.onPercentParams);
             }
         };
 
