@@ -124,11 +124,23 @@ module.exports = class SimpleResourcePreloader {
 
     exitPreloader() {
         this.log('exit preloader');
-        const callback = this.callback,
+        let callback, cbParams;
+
+        if (this.error) {
+            callback = this.onError;
+            cbParams = this.onErrorParams;
+        } else {
+            callback = this.callback;
             cbParams = this.cbParams;
+        }
+
         if (typeof callback === 'function') {
-            this.log('run callback');
-            callback(...cbParams);
+            if (this.error) {
+                callback(this.error, ...cbParams);
+            } else {
+                callback(...cbParams);
+            }
+
         }
     }
 
@@ -176,18 +188,7 @@ module.exports = class SimpleResourcePreloader {
 
     //callbacks
     get callback() {
-        this.log('get callback');
-        if (this.error) {
-            if (typeof this.options.onError !== 'undefined') {
-                return this.options.onError;
-            } else {
-                return ()=>{};
-            }
-        }
-        if (typeof this.options.callback !== 'undefined') {
-            return this.options.callback;
-        }
-        return ()=>{};
+        return this.options.callback;
     }
 
     set callback(callback) {
@@ -197,7 +198,7 @@ module.exports = class SimpleResourcePreloader {
 
     get cbParams() {
         this.log('get cbParams');
-        return this.error ? this.onErrorParams : this.options.cbParams;
+        return this.options.cbParams;
     }
 
     set cbParams(params) {
