@@ -10,7 +10,10 @@ module.exports = class SimpleResourcePreloader {
     get defaultOptions() {
         this.log('get default options');
         return {
-            callback: () => this.log('run default callback'),
+            callback: () => {
+                this.log('run default callback');
+                this.hidePreloader();
+            },
             cbParams: [],
             debug: false,
             eventError: 'preloaderror',
@@ -19,25 +22,53 @@ module.exports = class SimpleResourcePreloader {
             events: true,
             eventsTarget: document,
             files: [],
-            onError: () => this.log('run error callback'),
+            onError: () => {
+                this.log('run error callback');
+                this.hidePreloader();
+            },
             onErrorParams: [],
-            onPercent: () => this.log('run percent callback'),
+            onPercent: () => {
+                this.log('run percent callback');
+                this.updateProgress();
+            },
             onPercentParams: [],
+            preloader: document.querySelector('#preloader'),
+            progress: document.querySelector('#preloader .progress'),
+            showPercentsAttr: 'update-progress'
         };
     }
 
+    preload() {
+        this.log('start preload');
+        if (this.validate()) {
+            this.files.forEach(uri => this.load(uri));
+        }
+    }
+
+    validate() {
+        this.log('validate');
+        if (this.count) {
+            return true;
+        } else {
+            this.error = new Error('No files to preload');
+            this.runError();
+            this.exitPreloader();
+            return false;
+        }
+    }
+
     load(uri) {
-        this.log('load');
+        this.log(`load ${uri}`);
         const xhr = new XMLHttpRequest();
         xhr.onprogress = e => {
             this.updateSizes(e, uri);
             const percents = this.percentageCalc();
             if (percents !== this.percents) {
                 this.percents = percents;
-                if (this.options.events && this.options.events !== 'false') {
-                    this.triggerEvent(this.options.eventPercent, {value: percents});
+                this.triggerEvent(this.options.eventProgress, {value: percents});
+                if (typeof this.onPercent === 'function') {
+                    this.onPercent(percents, ...this.onPercentParams);
                 }
-                this.onPercent(percents, ...this.onPercentParams);
             }
         };
 
@@ -48,20 +79,18 @@ module.exports = class SimpleResourcePreloader {
             } else {
                 this.noAccess++;
                 this.error = new Error(`Can't Access "${uri}". Status code ${target.status}`);
+                this.runError();
             }
             if (this.loaded + this.noAccess === this.count) {
-                this.resolveEvents();
+                this.triggerEvent(this.options.eventName);
                 this.exitPreloader();
             }
         };
 
-
         xhr.ontimeout = () => {
             this.error = new Error(`timeout error`);
-            this.resolveEvents();
-            this.exitPreloader();
+            this.runError();
         };
-
 
         xhr.open('GET', uri, true);
         xhr.send();
@@ -103,22 +132,18 @@ module.exports = class SimpleResourcePreloader {
         return 0;
     }
 
-    preload() {
-        this.log('start preload');
-        if (this.validate()) {
-            this.files.forEach(uri => this.load(uri));
-        }
-    }
-
-    validate() {
-        this.log('validate');
-        if (this.count === 0) {
-            this.error = new Error('No files to preload');
-            this.resolveEvents();
-            this.exitPreloader();
-            return false;
-        } else {
-            return true;
+    triggerEvent(eventName, details) {
+        if (this.options.events) {
+            if (this.options.events !== 'false') {
+                const
+                    eventDetails = details || {},
+                    event = new CustomEvent(eventName, {detail: eventDetails}),
+                    target = this.getElement(this.options.eventsTarget);
+                if (target) {
+                    this.log(`trigger event ${eventName}`);
+                    target.dispatchEvent(event);
+                }
+            }
         }
     }
 
@@ -144,31 +169,80 @@ module.exports = class SimpleResourcePreloader {
         }
     }
 
-    resolveEvents() {
-        this.log('resolve events');
-        if (this.options.events && this.options.events !== 'false') {
-            if (this.error) {
-                console.log(`%c${this.error.message}`, 'color: #bb5577');
-                this.triggerEvent(this.options.eventError);
-            } else {
-                this.triggerEvent(this.options.eventName);
-            }
+    getElement(element) {
+        this.log('get element');
+        if (typeof element === 'string') {
+            element = document.querySelector(element);
+        }
+        if (element instanceof HTMLElement || element instanceof HTMLDocument) {
+            return element;
+        }
+        return false;
+    }
+
+    hidePreloader() {
+        if (this.preloader) {
+            this.log('hide preloader');
+            this.preloader.style.display = 'none';
         }
     }
 
-    triggerEvent(eventName, details) {
-        this.log('trigger event');
-        const
-            eventDetails = details || {},
-            event = new CustomEvent(eventName, {detail: eventDetails}),
-            target = this.options.eventsTarget;
-        target.dispatchEvent(event);
+    showPreloader() {
+        if (this.preloader) {
+            this.log('show preloader');
+            this.preloader.style.display = '';
+        }
+    }
+
+    updateProgress() {
+        if (this.progress) {
+            this.log('updateProgress');
+            if (this.progress.hasAttribute(this.showPercentsAttr)) {
+                this.progress.textContent = `${this.percents}%`;
+            }
+            this.progress.setAttribute('progress', this.percents);
+        }
+    }
+
+    runError() {
+        console.log(`%c${this.error.message}`, 'color: #bb5577');
+        this.triggerEvent(this.options.eventError, {error: this.error.message});
     }
 
     log(message) {
         if (typeof this.options !== 'undefined' && this.options.debug && this.options.debug !== 'false') {
             console.log(message);
         }
+    }
+
+    get preloader() {
+        this.log('get preloader element');
+        return this.getElement(this.options.preloader);
+    }
+
+    set preloader(element) {
+        this.log('set preloader element');
+        this.options.preloader = element;
+    }
+
+    get progress() {
+        this.log('get progress element');
+        return this.getElement(this.options.progress);
+    }
+
+    set progress(element) {
+        this.log('set progress element');
+        this.options.progress = element;
+    }
+
+    get showPercentsAttr() {
+        this.log('get attribute to show progress');
+        return this.options.showPercentsAttr;
+    }
+
+    set showPercentsAttr(attr) {
+        this.log('set attribute to show progress');
+        this.options.showPercentsAttr = attr;
     }
 
     get count() {
@@ -239,5 +313,4 @@ module.exports = class SimpleResourcePreloader {
     set onPercentParams(params) {
         this.options.onPercentParams = params;
     }
-
 };
