@@ -1,0 +1,36 @@
+{
+  "name": "simple-resource-preloader",
+  "version": "1.0.0",
+  "description": "Load any resources with JS with triggering events and callbacks",
+  "main": "SimpleResourcePreloader.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/b3rz3rkr/simple-resource-preloader.git"
+  },
+  "keywords": [
+    "tiny",
+    "simple",
+    "resource",
+    "asset",
+    "image",
+    "video",
+    "sound",
+    "preloader",
+    "loader",
+    "percent",
+    "progress",
+    "vanilla",
+    "js",
+    "es6",
+    "class"
+  ],
+  "author": "Serhiy Tsarenko <b3rz3rkr@gmail.com> (https://github.com/b3rz3rkr)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/b3rz3rkr/simple-resource-preloader/issues"
+  },
+  "homepage": "https://github.com/b3rz3rkr/simple-resource-preloader#readme"
+}
