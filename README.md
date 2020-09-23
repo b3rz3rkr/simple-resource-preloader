@@ -45,14 +45,13 @@ preloader.preload();
 | progress         | NodeList '\#preloader \[progress\]'| '\.selector'\/node list    | string\/NodeList object  | This DOM elements will receive updates of progress attribute  |
 | writePercentsAttr| 'txt\-progress'                    | 'attribute\-name'         | 'string'                | Progress elements with this attribute will get updates of text|
 
- If type of this value is not a function this key will be ignored.<br>
- This value can be true or 'true' any other values is false.<br>
- Only first DOM Element, if no DOM elements found or value is invalid it will be ignored.<br>
- First parameter of the executed function will be the error object, parameters from this array will be added after it.<br>
- First parameter of the executed function will be the loading percentage (integer number), parameters from this array will be added after it.<br>
- All DOM Elements selected with this selector will get updates of progress attribute during loading. It's also can be outside preloader or/and event target.<br>
- All progress DOM Elements with this attribute wil get inner text updates during loading.<br>
-
+ If type of this value is not a function this key will be ignored.
+ This value can be true or 'true' any other values is false.
+ Only first DOM Element, if no DOM elements found or value is invalid it will be ignored.
+ First parameter of the executed function will be the error object, parameters from this array will be added after it.
+ First parameter of the executed function will be the loading percentage (integer number), parameters from this array will be added after it.
+ All DOM Elements selected with this selector will get updates of progress attribute during loading. It's also can be outside preloader or\/and event target.
+ All progress DOM Elements with this attribute wil get inner text updates during loading.
 
 ##Events
 All events have event.detail.loaded and event.detail.failed properties, types is number.
