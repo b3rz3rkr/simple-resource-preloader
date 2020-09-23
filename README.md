@@ -44,8 +44,14 @@ preloader.preload();
 | preloader        | DOM '#preloader'                  | '#selector'/DOM          | string/DOM object       | Hide this DOM element after preload with default functions[^3]    |
 | progress         | Node List '#preloader [progress]' | '.selector'/node list    | string/NodeList object  | This DOM elements will receive updates of progress attribute[^6]  |
 | writePercentsAttr| 'txt-progress'                    | 'attribute-name'         | 'string'                | Progress elements with this attribute will get updates of text[^7]|
-
-[^1]: If type of this value is not a function this key will be ignored.
+<ul>
+<li id="fn1">
+    <p>
+        If type of this value is not a function this key will be ignored.&nbsp;
+        <a href="#fnref1" rev="footnote">↩</a>
+    </p>
+</li>
+</ul>
 [^2]: This value can be true or 'true' any other values is false.
 [^3]: Only first DOM Element, if no DOM elements found or value is invalid it will be ignored.
 [^4]: First parameter of the executed function will be the error object, parameters from this array will be added after it.
