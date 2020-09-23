@@ -28,7 +28,7 @@ preloader.preload();
 ## Options
 | Key              | Default value                      | Examples of other values | Type                    | Description                                                               |
 |:-----------------|:-----------------------------------|:-------------------------|:------------------------|:--------------------------------------------------------------------------|
-| callback         | hide preloader function            | function\(a, b\)\{\}     | function\any            | This function will run after preload complete without errors              |
+| callback         | hide preloader function            | function\(a, b\)\{\}     | function\any            | This function will run after preload complete without errors [^1]         |
 | cbParams         | \[\]                               | \[1, 'any string', true\]| array                   | Array of parameters for function stored in callback key                   |
 | debug            | false                              | true\'true'              | boolean\string          | You can enable additional messages in console                             |
 | eventEnd         | 'preloadend'                       | 'anyString'              | string                  | Event name that will be triggered on end of preloading                    |
@@ -45,12 +45,18 @@ preloader.preload();
 | progress         | NodeList '\#preloader \[progress\]'| '\.selector'\node list   | string\NodeList object  | This DOM elements will receive updates of progress attribute            |
 | writePercentsAttr| 'txt\-progress'                    | 'attribute\-name'        | 'string'                | Progress elements with this attribute will get updates of text          |
 
- If type of this value is not a function this key will be ignored.
+ [^1]:If type of this value is not a function this key will be ignored.
+ 
  This value can be true or 'true' any other values is false.
+ 
  Only first DOM Element, if no DOM elements found or value is invalid it will be ignored.
+ 
  First parameter of the executed function will be the error object, parameters from this array will be added after it.
+ 
  First parameter of the executed function will be the loading percentage (integer number), parameters from this array will be added after it.
+ 
  All DOM Elements selected with this selector will get updates of progress attribute during loading. It's also can be outside preloader or/and event target.
+ 
  All progress DOM Elements with this attribute wil get inner text updates during loading.
  
 ## Events
