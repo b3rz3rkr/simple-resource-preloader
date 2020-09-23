@@ -8,7 +8,6 @@ module.exports = class SimpleResourcePreloader {
     }
 
     get defaultOptions() {
-        this.log('get default options');
         return {
             callback: () => {
                 this.log('run default callback');
@@ -16,25 +15,25 @@ module.exports = class SimpleResourcePreloader {
             },
             cbParams: [],
             debug: false,
+            eventEnd: 'preloadend',
             eventError: 'preloaderror',
-            eventName: 'preloadend',
             eventProgress: 'preloadprogress',
             events: true,
             eventsTarget: document,
             files: [],
-            onError: () => {
-                this.log('run error callback');
+            ifError: () => {
+                this.log('run default error callback');
                 this.hidePreloader();
             },
-            onErrorParams: [],
-            onPercent: () => {
-                this.log('run percent callback');
+            ifErrorParams: [],
+            onProgress: () => {
+                this.log('run default progress callback');
                 this.updateProgress();
             },
-            onPercentParams: [],
+            onProgressParams: [],
             preloader: document.querySelector('#preloader'),
-            progress: document.querySelector('#preloader .progress'),
-            showPercentsAttr: 'update-progress'
+            progress: document.querySelectorAll('#preloader [progress]'),
+            writePercentsAttr: 'txt-progress'
         };
     }
 
@@ -64,10 +63,11 @@ module.exports = class SimpleResourcePreloader {
             this.updateSizes(e, uri);
             const percents = this.percentageCalc();
             if (percents !== this.percents) {
+                const details = this.getDetails({value: percents});
                 this.percents = percents;
-                this.triggerEvent(this.options.eventProgress, {value: percents});
-                if (typeof this.onPercent === 'function') {
-                    this.onPercent(percents, ...this.onPercentParams);
+                this.triggerEvent(this.options.eventProgress, details);
+                if (typeof this.onProgress === 'function') {
+                    this.onProgress(percents, ...this.onProgressParams);
                 }
             }
         };
@@ -82,7 +82,8 @@ module.exports = class SimpleResourcePreloader {
                 this.runError();
             }
             if (this.loaded + this.noAccess === this.count) {
-                this.triggerEvent(this.options.eventName);
+                const details = this.getDetails();
+                this.triggerEvent(this.options.eventEnd, details);
                 this.exitPreloader();
             }
         };
@@ -125,7 +126,7 @@ module.exports = class SimpleResourcePreloader {
             });
 
             if (total > 0) {
-                return Math.floor(loaded / total * 100);
+                return Math.round(loaded / total * 100);
             }
         }
 
@@ -133,27 +134,25 @@ module.exports = class SimpleResourcePreloader {
     }
 
     triggerEvent(eventName, details) {
-        if (this.options.events) {
-            if (this.options.events !== 'false') {
-                const
-                    eventDetails = details || {},
-                    event = new CustomEvent(eventName, {detail: eventDetails}),
-                    target = this.getElement(this.options.eventsTarget);
-                if (target) {
-                    this.log(`trigger event ${eventName}`);
-                    target.dispatchEvent(event);
-                }
+        if (this.options.events === true || this.options.events === 'true') {
+            const
+                eventDetails = details || {},
+                event = new CustomEvent(eventName, {detail: eventDetails}),
+                target = this.getElement(this.options.eventsTarget);
+            if (target) {
+                this.log(`trigger event ${eventName}`);
+                target.dispatchEvent(event);
             }
         }
     }
 
     exitPreloader() {
-        this.log('exit preloader');
+        this.log(`exit preloader ${this.error ? 'with error' : 'without errors'}`);
         let callback, cbParams;
 
         if (this.error) {
-            callback = this.onError;
-            cbParams = this.onErrorParams;
+            callback = this.ifError;
+            cbParams = this.ifErrorParams;
         } else {
             callback = this.callback;
             cbParams = this.cbParams;
@@ -169,15 +168,29 @@ module.exports = class SimpleResourcePreloader {
         }
     }
 
-    getElement(element) {
-        this.log('get element');
+    getElement(element, all) {
+        this.log(`getting element type is ${typeof element}`);
         if (typeof element === 'string') {
-            element = document.querySelector(element);
+            if (all) {
+                element = document.querySelectorAll(element);
+            } else {
+                element = document.querySelector(element);
+            }
         }
-        if (element instanceof HTMLElement || element instanceof HTMLDocument) {
+        if (element instanceof HTMLElement || element instanceof HTMLDocument || element instanceof NodeList) {
             return element;
         }
+        this.log('element not found');
+        this.log(element);
         return false;
+    }
+
+    getDetails(details) {
+        const common = {
+            loaded: this.loaded,
+            failed: this.noAccess
+        };
+        return {...common, ...details};
     }
 
     hidePreloader() {
@@ -197,20 +210,25 @@ module.exports = class SimpleResourcePreloader {
     updateProgress() {
         if (this.progress) {
             this.log('updateProgress');
-            if (this.progress.hasAttribute(this.showPercentsAttr)) {
-                this.progress.textContent = `${this.percents}%`;
-            }
-            this.progress.setAttribute('progress', this.percents);
+            this.progress.forEach(node => {
+                if (node.hasAttribute(this.writePercentsAttr)) {
+                    node.textContent = `${this.percents}%`;
+                    node.setAttribute(this.writePercentsAttr, `${this.percents}%`);
+                }
+                node.setAttribute('progress', this.percents);
+            });
+
         }
     }
 
     runError() {
         console.log(`%c${this.error.message}`, 'color: #bb5577');
-        this.triggerEvent(this.options.eventError, {error: this.error.message});
+        const details = this.getDetails({error: this.error.message});
+        this.triggerEvent(this.options.eventError, details);
     }
 
     log(message) {
-        if (typeof this.options !== 'undefined' && this.options.debug && this.options.debug !== 'false') {
+        if (this.options.debug === true || this.options.debug === 'true') {
             console.log(message);
         }
     }
@@ -227,7 +245,7 @@ module.exports = class SimpleResourcePreloader {
 
     get progress() {
         this.log('get progress element');
-        return this.getElement(this.options.progress);
+        return this.getElement(this.options.progress, true);
     }
 
     set progress(element) {
@@ -235,14 +253,14 @@ module.exports = class SimpleResourcePreloader {
         this.options.progress = element;
     }
 
-    get showPercentsAttr() {
+    get writePercentsAttr() {
         this.log('get attribute to show progress');
-        return this.options.showPercentsAttr;
+        return this.options.writePercentsAttr;
     }
 
-    set showPercentsAttr(attr) {
+    set writePercentsAttr(attr) {
         this.log('set attribute to show progress');
-        this.options.showPercentsAttr = attr;
+        this.options.writePercentsAttr = attr;
     }
 
     get count() {
@@ -262,6 +280,7 @@ module.exports = class SimpleResourcePreloader {
 
     //callbacks
     get callback() {
+        this.log('get callback');
         return this.options.callback;
     }
 
@@ -281,36 +300,44 @@ module.exports = class SimpleResourcePreloader {
     }
 
     //error callback
-    get onError() {
-        return this.options.onError;
+    get ifError() {
+        this.log('get error callback');
+        return this.options.ifError;
     }
 
-    set onError(onError) {
-        this.options.onError = onError;
+    set ifError(ifError) {
+        this.log('set error callback');
+        this.options.ifError = ifError;
     }
 
-    get onErrorParams() {
-        return this.options.onErrorParams;
+    get ifErrorParams() {
+        this.log('get error cbParams');
+        return this.options.ifErrorParams;
     }
 
-    set onErrorParams(params) {
-        this.options.onErrorParams = params;
+    set ifErrorParams(params) {
+        this.log('set error cbParams');
+        this.options.ifErrorParams = params;
     }
 
     //percents changing callback
-    get onPercent() {
-        return this.options.onPercent;
+    get onProgress() {
+        this.log('get progress callback');
+        return this.options.onProgress;
     }
 
-    set onPercent(onPercent) {
-        this.options.onPercent = onPercent;
+    set onProgress(onProgress) {
+        this.log('set progress callback');
+        this.options.onProgress = onProgress;
     }
 
-    get onPercentParams() {
-        return this.options.onPercentParams;
+    get onProgressParams() {
+        this.log('get progress cbParams');
+        return this.options.onProgressParams;
     }
 
-    set onPercentParams(params) {
-        this.options.onPercentParams = params;
+    set onProgressParams(params) {
+        this.log('set progress cbParams');
+        this.options.onProgressParams = params;
     }
 };
