@@ -70,8 +70,8 @@ document.addEventListener('preloadprogress', e => {
 ##Methods
 WIP
 
-Footnotes
-<ol>
+##Footnotes
+
 <li id="fn1">
     <p>
         If type of this value is not a function this key will be ignored.&nbsp;
@@ -114,4 +114,3 @@ Footnotes
         <a href="#fnref7" rev="footnote">↩</a>
     </p>
 </li>
-</ol>
