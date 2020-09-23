@@ -44,6 +44,33 @@ preloader.preload();
 | preloader        | DOM '#preloader'                  | '#selector'/DOM          | string/DOM object       | Hide this DOM element after preload with default functions<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup>    |
 | progress         | Node List '#preloader [progress]' | '.selector'/node list    | string/NodeList object  | This DOM elements will receive updates of progress attribute<sup id="fnref6"><a href="#fn6" rel="footnote">6</a></sup>  |
 | writePercentsAttr| 'txt-progress'                    | 'attribute-name'         | 'string'                | Progress elements with this attribute will get updates of text<sup id="fnref7"><a href="#fn7" rel="footnote">7</a></sup>|
+
+##Events
+All events have event.detail.loaded and event.detail.failed properties, types is number.
+``` javascript
+document.addEventListener('preloadend', e => {
+    console.log('total loaded =' + e.detail.loaded); 
+    console.log('total fails =' + e.detail.failed); 
+});
+```
+
+Error event have event.detail.error property, which contains last Error object.
+``` javascript
+document.addEventListener('preloaderror', e => {
+    console.log(e.detail.error); 
+});
+```
+
+Progress event contains percentage value of loaded files.
+``` javascript
+document.addEventListener('preloadprogress', e => {
+    console.log(`Loaded ${e.detail.value}%`); 
+});
+```
+##Methods
+WIP
+
+Footnotes
 <ol>
 <li id="fn1">
     <p>
@@ -88,28 +115,3 @@ preloader.preload();
     </p>
 </li>
 </ol>
-
-##Events
-All events have event.detail.loaded and event.detail.failed properties, types is number.
-``` javascript
-document.addEventListener('preloadend', e => {
-    console.log('total loaded =' + e.detail.loaded); 
-    console.log('total fails =' + e.detail.failed); 
-});
-```
-
-Error event have event.detail.error property, which contains last Error object.
-``` javascript
-document.addEventListener('preloaderror', e => {
-    console.log(e.detail.error); 
-});
-```
-
-Progress event contains percentage value of loaded files.
-``` javascript
-document.addEventListener('preloadprogress', e => {
-    console.log(`Loaded ${e.detail.value}%`); 
-});
-```
-##Methods
-WIP
