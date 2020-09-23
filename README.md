@@ -28,7 +28,7 @@ preloader.preload();
 ## Options
 | Key              | Default value                     | Examples of other values | Type                    | Description                                                       |
 |:-----------------|:----------------------------------|:-------------------------|:------------------------|:------------------------------------------------------------------|
-| callback         | hide preloader function           | function(a, b){}         | function/any            | This function will run after preload complete without errors[^1]  |
+| callback         | hide preloader function           | function(a, b){}         | function/any            | This function will run after preload complete without errors<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>|
 | cbParams         | []                                | [1, 'any string', true]  | array                   | Array of parameters for function stored in callback key           |
 | debug            | false                             | true/'true'              | boolean/string          | You can enable additional messages in console[^2]                 |
 | eventEnd         | 'preloadend'                      | 'anyString'              | string                  | Event name that will be triggered on end of preloading            |
