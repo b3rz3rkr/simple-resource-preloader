@@ -28,7 +28,7 @@ preloader.preload();
 ## Options
 
 
-##Events
+## Events
 All events have event.detail.loaded and event.detail.failed properties, types is number.
 ``` javascript
 document.addEventListener('preloadend', e => {
@@ -50,5 +50,5 @@ document.addEventListener('preloadprogress', e => {
     console.log(`Loaded ${e.detail.value}%`); 
 });
 ```
-##Methods
+## Methods
 WIP
