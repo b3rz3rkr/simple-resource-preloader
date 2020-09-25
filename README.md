@@ -6,6 +6,8 @@ Load any resources using vanilla JS with triggering events and/or callbacks.
 npm install simple-resources-preloader
 ```
 
+---
+
 ## Basic Usage
 If you are using Webpack or another bundler you can just import it
 ``` javascript
@@ -25,6 +27,9 @@ to execute preloader you need to run .preload() method
 ``` javascript
 preloader.preload();
 ```
+
+---
+
 ## Options
 | Key              | Default value                      | Examples of other values | Type                    | Description                                                                                                             |
 |:-----------------|:-----------------------------------|:-------------------------|:------------------------|:------------------------------------------------------------------------------------------------------------------------|
@@ -94,27 +99,136 @@ preloader.preload();
     </li>
 </ol>
  
+---
+ 
 ## Events
-All events have event.detail.loaded and event.detail.failed properties, types is number.
+All plugin events have event.detail.loaded and event.detail.failed properties, types is number.
+#### preloadend
 ``` javascript
 document.addEventListener('preloadend', e => {
     console.log('total loaded =' + e.detail.loaded); 
     console.log('total fails =' + e.detail.failed); 
 });
 ```
-
+#### preloaderror
 Error event have event.detail.error property, which contains last Error object.
 ``` javascript
 document.addEventListener('preloaderror', e => {
     console.log(e.detail.error); 
 });
 ```
-
+#### preloadprogress
 Progress event contains percentage value of loaded files.
 ``` javascript
 document.addEventListener('preloadprogress', e => {
     console.log(`Loaded ${e.detail.value}%`); 
 });
 ```
-## Methods
+
+---
+
+## Methods and Properties
+
+Start preloader
+```javascript 
+preloader.preload();
+```
+
+---
+
+Triggering custom event on target with additional details
+
+Acceptable properties eventName type is string, details type is object 
+```javascript
+const
+    eventName = 'customEvent', 
+    details = {
+        number:1
+    };
+preloader.triggerEvent(eventName, details); 
+```
+
+---
+
+Hiding DOM element stored in preloader.
+```javascript
+preloader.hidePreloader();
+``` 
+
+---
+
+Show DOM element stored in preloader if it was hidden with 'hidePreloader()'.
+```javascript
+preloader.showPreloader();
+``` 
+
+---
+
+Update progress elements stored in progress.
+```javascript
+preloader.updateProgress();
+``` 
+
+### Getters and setters
+
+Set and get options parameters. 
+
+*See [options](#options) section for details.*
+
+```javascript
+const defaultOptions = preloader.defaultOptions; //Get options object used by default
+
+preloader.preloader = '#preloaderSelector'; 
+const preloaderElement = preloader.preloader; //Get DOM element even if selector string stored to options  
+
+preloader.progress = '#progressSelector'; 
+const progressElement = preloader.progress; //Get DOM element even if selector string stored to options
+
+preloader.writePercentsAttr = 'attribute';
+const progressAttrTxt = preloader.writePercentsAttr; 
+
+preloader.files = ['path/to/file1.ext', 'path/to/file2.ext'];
+const filesList = preloader.files;
+```
+
+```javascript
+// main callback
+preloader.cbParams = [1, 'a'];
+const cbParams = preloader.cbParams;
+    
+preloader.callback = (a, b) => {
+    console.log(a); //expected output – 1 
+    console.log(b); //expected output – 'a'
+};
+const callback = preloader.callback; 
+```
+
+```javascript
+//error callback
+preloader.ifErrorParams = [1, 'a'];
+const ifErrorParams = preloader.ifErrorParams;
+    
+preloader.ifError = (error, a, b) => {
+    console.log(error); //expected output – Error object
+    console.log(a);     //expected output – 1 
+    console.log(b);     //expected output – 'a'
+};
+const ifError = preloader.ifError; 
+```
+
+```javascript
+//percents changing callback
+preloader.onProgressParams = [1, 'a'];
+const onProgressParams = preloader.onProgressParams;
+    
+preloader.onProgress = (progress, a, b) => {
+    console.log(progress);  //expected output – integer number from 0 to 100
+    console.log(a);         //expected output – 1 
+    console.log(b);         //expected output – 'a'
+};
+const onProgress = preloader.onProgress; 
+``` 
+
+### Properties
+
 WIP
