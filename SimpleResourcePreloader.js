@@ -1,7 +1,7 @@
-module.exports = class SimpleResourcePreloader {
 /*
     __methods will be switched to #methods when private class fields support will be added to webpack
  */
+export default class SimpleResourcePreloader {
     constructor(options) {
         this.options = {...this.defaultOptions, ...options};
         this.loaded = 0;

@@ -2,7 +2,7 @@
   "name": "simple-resource-preloader",
   "version": "1.0.0",
   "description": "Load any resources with JS with triggering events and callbacks",
-  "main": "SimpleResourcePreloader.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -32,5 +32,9 @@
   "bugs": {
     "url": "https://github.com/b3rz3rkr/simple-resource-preloader/issues"
   },
-  "homepage": "https://github.com/b3rz3rkr/simple-resource-preloader#readme"
+  "homepage": "https://github.com/b3rz3rkr/simple-resource-preloader#readme",
+  "devDependencies": {
+    "uglify-es": "^3.3.9"
+  },
+  "dependencies": {}
 }
