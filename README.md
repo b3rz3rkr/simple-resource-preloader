@@ -28,7 +28,7 @@ npm install simple-resources-preloader
 
 ## Basic Usage
 
-If you are using Webpack or another bundler you can just import it. If you don't use any bundlers go to [this section](#without-bunler-usage)  
+If you are using Webpack or another bundler you can just import it. If you don't use any bundlers go to [this section](#without-bundler-usage)  
 
 ``` javascript
 import SRPreloader from 'simple-resources-preloader';
