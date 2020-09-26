@@ -34,8 +34,8 @@ export default class SimpleResourcePreloader {
                 this.updateProgress();
             },
             onProgressParams: [],
-            preloader: document.querySelector('__preloader'),
-            progress: document.querySelectorAll('__preloader [progress]'),
+            preloader: document.querySelector('#preloader'),
+            progress: document.querySelectorAll('#preloader [progress]'),
             writePercentsAttr: 'txt-progress'
         };
     }
