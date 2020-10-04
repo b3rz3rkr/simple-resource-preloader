@@ -48,6 +48,15 @@ to execute preloader you need to run .preload() method
 preloader.preload();
 ```
 
+You can use styleVar option value in css code
+
+```css
+.preloader::before {
+    transition: width 0.1s;
+    width:var(--preloader-progress);
+}
+``` 
+
 ## Options
 
 | Key              | Default value                      | Examples of other values | Type                    | Description                                                                                                             |
@@ -69,6 +78,7 @@ preloader.preload();
 | progress         | NodeList '\#preloader \[progress\]'| '\.selector'\node list   | string\NodeList object  | This DOM elements will receive updates of progress attribute<sup id="fnref6"><a href="#fn6" rel="footnote">6</a></sup>  |
 | writePercentsAttr| 'txt\-progress'                    | 'attribute\-name'        | 'string'                | Progress elements with this attribute will get updates of text<sup id="fnref7"><a href="#fn7" rel="footnote">7</a></sup>|
 | styleVar         | '\-\-preloader\-progress'          | '\-\-variable\-name'     | 'string'                | Progress elements will get update of this css variable with percentage value                                            |
+
 <ol>
     <li id="fn1">
         <p>
