@@ -36,7 +36,8 @@ export default class SimpleResourcePreloader {
             onProgressParams: [],
             preloader: document.querySelector('#preloader'),
             progress: document.querySelectorAll('#preloader [progress]'),
-            writePercentsAttr: 'txt-progress'
+            writePercentsAttr: 'txt-progress',
+            styleVar: '--preloader-progress'
         };
     }
 
@@ -219,6 +220,7 @@ export default class SimpleResourcePreloader {
                     node.setAttribute(this.writePercentsAttr, `${this.percents}%`);
                 }
                 node.setAttribute('progress', this.percents);
+                node.setAttribute('style', `${this.styleVar}: ${this.percents}%`);
             });
 
         }
@@ -252,6 +254,16 @@ export default class SimpleResourcePreloader {
     set writePercentsAttr(attr) {
         this.__log('set attribute to show progress');
         this.options.writePercentsAttr = attr;
+    }
+
+    get styleVar() {
+        this.__log('get css variable name');
+        return this.options.styleVar;
+    }
+
+    set styleVar(variable) {
+        this.__log('set css variable name');
+        this.options.styleVar = variable;
     }
 
     get files() {
@@ -343,4 +355,4 @@ export default class SimpleResourcePreloader {
         this.__log('set progress cbParams');
         this.options.onProgressParams = params;
     }
-};
+}

@@ -1,0 +1,37 @@
+.progress {
+    position:  absolute;
+    top:       0;
+    right:     0;
+    bottom:    0;
+    left:      0;
+    animation: 1s progress-rotation infinite linear;
+}
+
+.progress::before, .progress::after {
+    position:      absolute;
+    top:           -7px;
+    right:         -7px;
+    bottom:        -7px;
+    left:          -7px;
+    content:       '';
+    border-radius: 50%;
+}
+
+.progress::after {
+    transition: clip-path 0.3s;
+    border:     8px solid #aaaaaa;
+    clip-path:  inset(0 calc(50% - var(--preloader-progress) / 2) 0 calc(50% - var(--preloader-progress) / 2));
+}
+
+.progress::before {
+    border: 6px solid #757575;
+}
+
+@keyframes progress-rotation {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

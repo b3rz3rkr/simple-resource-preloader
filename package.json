@@ -1,10 +1,13 @@
 {
   "name": "simple-resource-preloader",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Load any resources with JS with triggering events and callbacks",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "min": "uglifyjs SimpleResourcePreloader.js -o dist/SimpleResourcePreloader.min.js",
+    "es5": "buble SimpleResourcePreloader.js > dist/SimpleResourcePreloader.es5.js --objectAssign",
+    "es5min": "uglifyjs dist/SimpleResourcePreloader.es5.js -o dist/SimpleResourcePreloader.es5.min.js"
   },
   "repository": {
     "type": "git",
@@ -34,7 +37,8 @@
   },
   "homepage": "https://github.com/b3rz3rkr/simple-resource-preloader#readme",
   "devDependencies": {
-    "uglify-es": "^3.3.9"
+    "uglify-es": "^3.3.9",
+    "buble": "^0.20.0"
   },
   "dependencies": {}
 }

@@ -7,10 +7,10 @@ var SimpleResourcePreloader = function SimpleResourcePreloader(options) {
     this.percents = 0;
 };
 
-var prototypeAccessors = { defaultOptions: { configurable: true },preloader: { configurable: true },progress: { configurable: true },writePercentsAttr: { configurable: true },files: { configurable: true },__count: { configurable: true },callback: { configurable: true },cbParams: { configurable: true },ifError: { configurable: true },ifErrorParams: { configurable: true },onProgress: { configurable: true },onProgressParams: { configurable: true } };
+var prototypeAccessors = { defaultOptions: { configurable: true },preloader: { configurable: true },progress: { configurable: true },writePercentsAttr: { configurable: true },styleVar: { configurable: true },files: { configurable: true },__count: { configurable: true },callback: { configurable: true },cbParams: { configurable: true },ifError: { configurable: true },ifErrorParams: { configurable: true },onProgress: { configurable: true },onProgressParams: { configurable: true } };
 
 prototypeAccessors.defaultOptions.get = function () {
-    var this$1 = this;
+        var this$1 = this;
 
     return {
         callback: function () {
@@ -37,12 +37,13 @@ prototypeAccessors.defaultOptions.get = function () {
         onProgressParams: [],
         preloader: document.querySelector('#preloader'),
         progress: document.querySelectorAll('#preloader [progress]'),
-        writePercentsAttr: 'txt-progress'
+        writePercentsAttr: 'txt-progress',
+        styleVar: '--preloader-progress'
     };
 };
 
 SimpleResourcePreloader.prototype.preload = function preload () {
-    var this$1 = this;
+        var this$1 = this;
 
     this.__log('start preload');
     if (this.__validate()) {
@@ -63,12 +64,12 @@ SimpleResourcePreloader.prototype.__validate = function __validate () {
 };
 
 SimpleResourcePreloader.prototype.__load = function __load (uri) {
-    var this$1 = this;
+        var this$1 = this;
 
     this.__log(("load " + uri));
     var xhr = new XMLHttpRequest();
     xhr.onprogress = function (e) {
-        var ref;
+            var ref;
 
         this$1.__updateSizes(e, uri);
         var percents = this$1.__percentageCalc();
@@ -115,7 +116,7 @@ SimpleResourcePreloader.prototype.__updateSizes = function __updateSizes (e, uri
 };
 
 SimpleResourcePreloader.prototype.__percentageCalc = function __percentageCalc () {
-    var this$1 = this;
+        var this$1 = this;
 
     var keys = Object.keys(this.fileSizes),
         count = this.options.files.length;
@@ -220,7 +221,7 @@ SimpleResourcePreloader.prototype.showPreloader = function showPreloader () {
 };
 
 SimpleResourcePreloader.prototype.updateProgress = function updateProgress () {
-    var this$1 = this;
+        var this$1 = this;
 
     if (this.progress) {
         this.__log('updateProgress');
@@ -230,6 +231,7 @@ SimpleResourcePreloader.prototype.updateProgress = function updateProgress () {
                 node.setAttribute(this$1.writePercentsAttr, ((this$1.percents) + "%"));
             }
             node.setAttribute('progress', this$1.percents);
+            node.setAttribute('style', ((this$1.styleVar) + ": " + (this$1.percents) + "%"));
         });
 
     }
@@ -263,6 +265,16 @@ prototypeAccessors.writePercentsAttr.get = function () {
 prototypeAccessors.writePercentsAttr.set = function (attr) {
     this.__log('set attribute to show progress');
     this.options.writePercentsAttr = attr;
+};
+
+prototypeAccessors.styleVar.get = function () {
+    this.__log('get css variable name');
+    return this.options.styleVar;
+};
+
+prototypeAccessors.styleVar.set = function (variable) {
+    this.__log('set css variable name');
+    this.options.styleVar = variable;
 };
 
 prototypeAccessors.files.get = function () {

@@ -61,14 +61,14 @@ preloader.preload();
 | events           | true                               | false\'true'             | boolean\string          | You can disable all events triggering with the plugin<sup id="fnref2-2"><a href="#fn2" rel="footnote">2</a></sup>       |
 | eventsTarget     | document                           | '\#selector'\DOM         | string\DOM object       | All events will trigger on this DOM element or document<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup>       |
 | files            | \[\]                               | \['path\file', 'file2'\] | array of stings         | Files list to preload                                                                                                   |
-| ifError          | hide preloader function            | e => console\.log\(e\)   | function\any            | This function will run after preload complete with errors<sup id="fnref1-2"><a href="#fn1" rel="footnote">1</a></sup> |
+| ifError          | hide preloader function            | e => console\.log\(e\)   | function\any            | This function will run after preload complete with errors<sup id="fnref1-2"><a href="#fn1" rel="footnote">1</a></sup>   |
 | ifErrorParams    | \[\]                               | \[1, 'any string', true\]| array                   | Array of parameters for function stored in ifError key<sup id="fnref4"><a href="#fn4" rel="footnote">4</a></sup>        |
-| onProgress       | update percents function           | e => console\.log\(e\)   | function\any            | this function will be executed on every percents change<sup id="fnref1-3"><a href="#fn1" rel="footnote">1</a></sup>   |
+| onProgress       | update percents function           | e => console\.log\(e\)   | function\any            | this function will be executed on every percents change<sup id="fnref1-3"><a href="#fn1" rel="footnote">1</a></sup>     |
 | onProgressParams | \[\]                               | \[1, 'any string', true\]| array                   | Array of parameters for function stored in onProgress key<sup id="fnref5"><a href="#fn5" rel="footnote">5</a></sup>     |
 | preloader        | DOM '\#preloader'                  | '\#selector'\DOM         | string\DOM object       | Hide this DOM element after preload with default functions<sup id="fnref3-2"><a href="#fn3" rel="footnote">3</a></sup>  |
 | progress         | NodeList '\#preloader \[progress\]'| '\.selector'\node list   | string\NodeList object  | This DOM elements will receive updates of progress attribute<sup id="fnref6"><a href="#fn6" rel="footnote">6</a></sup>  |
 | writePercentsAttr| 'txt\-progress'                    | 'attribute\-name'        | 'string'                | Progress elements with this attribute will get updates of text<sup id="fnref7"><a href="#fn7" rel="footnote">7</a></sup>|
-
+| styleVar         | '\-\-preloader\-progress'          | '\-\-variable\-name'     | 'string'                | Progress elements will get update of this css variable with percentage value                                            |
 <ol>
     <li id="fn1">
         <p>
@@ -207,6 +207,8 @@ Set and get options parameters.
 *See [options](#options) section for details.*
 
 ```javascript
+const defaultOptions = preloader.defaultOptions; //Get options object used by default
+
 preloader.files = ['path/to/file1.ext', 'path/to/file2.ext'];
 const filesList = preloader.files;
 
@@ -219,7 +221,8 @@ const progressElement = preloader.progress; //Get DOM element even if selector s
 preloader.writePercentsAttr = 'attribute';
 const progressAttrTxt = preloader.writePercentsAttr; 
 
-const defaultOptions = preloader.defaultOptions; //Get options object used by default
+preloader.styleVar = '--variable-name';
+const styleVar = preloader.styleVar;
 ```
 
 ```javascript
@@ -317,7 +320,7 @@ You need to connect plugin script 'SimpleResourcePreloader.es5.js' or 'SimpleRes
 To init preloader you need to create new object
 
 ```javascript
-const preloader = new SimpleResourcePreloader({
+var preloader = new SimpleResourcePreloader({
     files: ['./video/intro.mp4', './video/background.mp4']
 });
 ```
