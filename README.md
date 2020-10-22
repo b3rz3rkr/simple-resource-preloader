@@ -78,7 +78,7 @@ You can use styleVar option value in css code
 | progress         | NodeList '\#preloader \[progress\]'| '\.selector'\node list   | string\NodeList object  | This DOM elements will receive updates of progress attribute<sup id="fnref6"><a href="#fn6" rel="footnote">6</a></sup>  |
 | writePercentsAttr| 'txt\-progress'                    | 'attribute\-name'        | 'string'                | Progress elements with this attribute will get updates of text<sup id="fnref7"><a href="#fn7" rel="footnote">7</a></sup>|
 | styleVar         | '\-\-preloader\-progress'          | '\-\-variable\-name'     | 'string'                | Progress elements will get update of this css variable with percentage value                                            |
-
+| speedTimeout     | 500                                | '1000'                   | number\string           | How often speed calculation must be updated (value in ms)                                                               |
 <ol>
     <li id="fn1">
         <p>
@@ -153,11 +153,13 @@ document.addEventListener('preloaderror', e => {
 ```
 #### preloadprogress
 
-Progress event contains percentage value of loaded files.
+Progress event contains percentage value of loaded files and current speed values
 
 ``` javascript
 document.addEventListener('preloadprogress', e => {
-    console.log(`Loaded ${e.detail.value}%`); 
+    console.log(`Loaded ${e.detail.value}%`);
+    console.log(`Preload speed is ${e.detail.speed.bytesSpeed} bytes/second`);  
+    console.log(`Preload speed is ${e.detail.speed.value} ${e.detail.speed.units}`);
 });
 ```
 
@@ -233,6 +235,9 @@ const progressAttrTxt = preloader.writePercentsAttr;
 
 preloader.styleVar = '--variable-name';
 const styleVar = preloader.styleVar;
+
+preloader.speedTimeout = '250';
+const speedTimeout = preloader.speedTimeout; //Get number value even if string is stored to options, if value is invalid returns default value
 ```
 
 ```javascript

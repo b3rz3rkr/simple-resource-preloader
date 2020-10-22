@@ -341,7 +341,10 @@ export default class SimpleResourcePreloader {
     }
 
     get speedTimeout() {
-        return this.options.speedTimeout;
+        if (typeof Number(this.options.speedTimeout) === 'number') {
+            return Number(this.options.speedTimeout);
+        }
+        return this.defaultOptions.speedTimeout;
     }
 
     set speedTimeout(timeout) {
