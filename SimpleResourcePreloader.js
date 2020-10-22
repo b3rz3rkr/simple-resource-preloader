@@ -37,7 +37,8 @@ export default class SimpleResourcePreloader {
             preloader: document.querySelector('#preloader'),
             progress: document.querySelectorAll('#preloader [progress]'),
             writePercentsAttr: 'txt-progress',
-            styleVar: '--preloader-progress'
+            styleVar: '--preloader-progress',
+            speedTimeout: 500
         };
     }
 
@@ -64,16 +65,27 @@ export default class SimpleResourcePreloader {
         this.__log(`load ${uri}`);
         const xhr = new XMLHttpRequest();
         xhr.onprogress = e => {
-            this.__updateSizes(e, uri);
+            this.fileSizes.updated = this.fileSizes.updated ?? Date.now();
+            this.oldSizes = this.oldSizes ?? {...this.fileSizes};
+            const timeDiff = Date.now() - this.fileSizes.updated;
+            if (this.__needSpeedUpdate(timeDiff)) {
+                this.__updateSizes(e, uri);
+                this.__updateSpeed(timeDiff);
+                this.oldSizes = {...this.fileSizes};
+            } else {
+                this.__updateSizes(e, uri);
+            }
+
             const percents = this.__percentageCalc();
             if (percents !== this.percents) {
-                const details = this.__getDetails({value: percents});
+                const details = this.__getDetails({value: percents, speed: this.fileSizes.speed});
                 this.percents = percents;
                 this.triggerEvent(this.options.eventProgress, details);
                 if (typeof this.onProgress === 'function') {
                     this.onProgress(percents, ...this.onProgressParams);
                 }
             }
+
         };
 
         xhr.onloadend = e => {
@@ -106,28 +118,34 @@ export default class SimpleResourcePreloader {
             size: e.total,
             loaded: e.loaded
         };
+        this.__log('Updated files sizes is:');
+        this.__log(this.fileSizes);
+    }
+
+    __updateSpeed(time) {
+        this.fileSizes.updated = Date.now();
+        this.fileSizes.speed = this.__speedCalc(time, this.oldSizes);
+        this.__log('Updated speed is:');
+        this.__log(this.fileSizes.speed);
+    }
+
+    __needSpeedUpdate(timeDiff) {
+        return timeDiff >= this.speedTimeout || typeof this.fileSizes.speed === 'undefined';
     }
 
     __percentageCalc() {
-        const keys = Object.keys(this.fileSizes),
+
+        const
+            keys = Object.keys(this.fileSizes),
+            keysToRemove = ['updated', 'speed'],
+            links = keys.filter(key => !keysToRemove.includes(key)),
             count = this.options.files.length;
-
-        if (keys.length === count) {
+        if (links.length === count) {
             this.__log('calc percents');
-            let total = 0,
-                loaded = 0;
-
-            keys.forEach(key => {
-                const file = this.fileSizes[key];
-
-                if (file.loaded > 0) {
-                    loaded += file.loaded;
-                }
-
-                if (file.size > 0) {
-                    total += file.size;
-                }
-            });
+            const
+                totalLoaded = this.totalLoaded(),
+                total = totalLoaded.total,
+                loaded = totalLoaded.loaded;
 
             if (total > 0) {
                 return Math.round(loaded / total * 100);
@@ -135,6 +153,52 @@ export default class SimpleResourcePreloader {
         }
 
         return 0;
+    }
+
+    __speedCalc(time, oldSizes) {
+
+        const
+            loadedOld = this.totalLoaded(oldSizes).loaded,
+            loadedNew = this.totalLoaded().loaded,
+            diff = loadedNew - loadedOld,
+            timeDiff = time / 1000,
+            getSpeed = (value, time) => {
+                const speed = {
+                        bytesSpeed: 0,
+                        value: 0,
+                        units: 'Bytes/s'
+                    },
+                    units = ['Bytes/s', 'KB/s', 'MB/s', 'GB/s', 'TB/s'];
+                if (value > 0 && time > 0) {
+                    this.__log('calc speed');
+
+                    speed.bytesSpeed = Math.round(value / time);
+
+                    let count = Math.floor(Math.log(speed.bytesSpeed) / Math.log(1024));
+
+                    speed.value = Math.round(speed.bytesSpeed / Math.pow(1024, count) * 100) / 100;
+                    speed.units = units[count];
+                }
+                return speed;
+            },
+            speed = getSpeed(diff, timeDiff);
+
+        return speed;
+    }
+
+    totalLoaded(sizes = this.fileSizes, keys = Object.keys(sizes)) {
+
+        let total = 0,
+            loaded = 0;
+
+        keys.forEach(key => {
+            const file = sizes[key];
+            if (file.size > 0) {
+                total += file.size;
+                loaded += file.loaded ?? 0;
+            }
+        });
+        return {total, loaded};
     }
 
     __exitPreloader() {
@@ -276,6 +340,14 @@ export default class SimpleResourcePreloader {
         this.options.files = files;
     }
 
+    get speedTimeout() {
+        return this.options.speedTimeout;
+    }
+
+    set speedTimeout(timeout) {
+        this.options.speedTimeout = timeout;
+    }
+
     __runError() {
         console.log(`%c${this.error.message}`, 'color: __bb5577');
         const details = this.__getDetails({error: this.error.message});
@@ -355,4 +427,5 @@ export default class SimpleResourcePreloader {
         this.__log('set progress cbParams');
         this.options.onProgressParams = params;
     }
+
 }
