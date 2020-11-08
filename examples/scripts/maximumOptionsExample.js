@@ -17,6 +17,7 @@ const
         onProgressParams: ['Custom percent callback.', 'Loaded '], //params for percentage callback function
         preloader: '#myPreloader', //this preloader can be hidden with default callbacks and methods
         progress: '#myPreloader [progressbars]', //updates of progress attribute during loading
-        writePercentsAttr: 'progressbars' //updates inner text during loading for all progress elements with this attribute
+        writePercentsAttr: 'progressbars', //updates inner text during loading for all progress elements with this attribute
+        speedTimeout: 300
     });
 preloader.preload();
