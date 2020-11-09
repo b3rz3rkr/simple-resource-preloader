@@ -50,15 +50,22 @@ body {
     border: 6px solid #757575;
 }
 
-.percentage {
+.percentage, .speed {
     position: absolute;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
     text-align: center;
-    line-height: 500px;
+}
+
+.percentage {
+    line-height: 430px;
     font-size: 100px;
+}
+.speed {
+    line-height: 600px;
+    font-size: 50px;
 }
 
 @keyframes progress-rotation {
