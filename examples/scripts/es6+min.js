@@ -1,4 +1,4 @@
-import SRPreloader from '../dist/SimpleResourcePreloader.min.js';
+import SRPreloader from '../../dist/SimpleResourcePreloader.min.js';
 
 const preloader = new SRPreloader({
     files: ['https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4'],
