@@ -97,9 +97,10 @@ var SimpleResourcePreloader = /*#__PURE__*/function () {
         var percents = _this2.__percentageCalc();
 
         if (percents !== _this2.percents) {
-          var details = _this2.__getDetails({
+          var speed = _this2.fileSizes.speed,
+              details = _this2.__getDetails({
             value: percents,
-            speed: _this2.fileSizes.speed
+            speed: speed
           });
 
           _this2.percents = percents;
@@ -107,7 +108,7 @@ var SimpleResourcePreloader = /*#__PURE__*/function () {
           _this2.triggerEvent(_this2.options.eventProgress, details);
 
           if (typeof _this2.onProgress === 'function') {
-            _this2.onProgress.apply(_this2, [percents].concat(_toConsumableArray(_this2.onProgressParams)));
+            _this2.onProgress.apply(_this2, [percents].concat(_toConsumableArray(_this2.onProgressParams), [speed]));
           }
         }
       };

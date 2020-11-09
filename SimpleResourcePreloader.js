@@ -78,11 +78,12 @@ export default class SimpleResourcePreloader {
 
             const percents = this.__percentageCalc();
             if (percents !== this.percents) {
-                const details = this.__getDetails({value: percents, speed: this.fileSizes.speed});
+                const speed = this.fileSizes.speed,
+                    details = this.__getDetails({value: percents, speed});
                 this.percents = percents;
                 this.triggerEvent(this.options.eventProgress, details);
                 if (typeof this.onProgress === 'function') {
-                    this.onProgress(percents, ...this.onProgressParams);
+                    this.onProgress(percents, ...this.onProgressParams, speed);
                 }
             }
 
