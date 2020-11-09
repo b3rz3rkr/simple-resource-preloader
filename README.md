@@ -110,7 +110,8 @@ You can use styleVar option value in css code
     </li>
     <li id="fn5">
         <p>
-        First parameter of the executed function will be the loading percentage (integer number), parameters from this array will be added after it.&nbsp;
+        First parameter of the executed function will be the loading percentage (integer number), parameters from this array will be added after it. 
+        Last parameter — speed object with value, units and bytesSpeed keys.&nbsp;
             <a href="#fnref5" rev="footnote">↩</a>
         </p>
     </li>

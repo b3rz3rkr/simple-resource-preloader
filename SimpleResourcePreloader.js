@@ -83,7 +83,7 @@ export default class SimpleResourcePreloader {
                 this.percents = percents;
                 this.triggerEvent(this.options.eventProgress, details);
                 if (typeof this.onProgress === 'function') {
-                    this.onProgress(percents, ...this.onProgressParams, speed);
+                    this.onProgress(percents, ...this.onProgressParams, speed); //toDo move speed param to second position on major update
                 }
             }
 
