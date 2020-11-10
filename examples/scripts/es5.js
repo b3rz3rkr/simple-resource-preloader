@@ -7,8 +7,7 @@ var preloader = new SimpleResourcePreloader({
         ifError: function (str) {
             console.log(str);
         },
-        ifErrorParams: ['Error cb'],
-        debug: true
+        ifErrorParams: ['Error cb']
     }),
     progressOldFunction = preloader.onProgress,
     speedContainer = document.querySelector('.speed'),
