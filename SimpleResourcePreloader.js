@@ -181,10 +181,8 @@ export default class SimpleResourcePreloader {
                     speed.units = units[count];
                 }
                 return speed;
-            },
-            speed = getSpeed(diff, timeDiff);
-
-        return speed;
+            };
+        return getSpeed(diff, timeDiff);
     }
 
     totalLoaded(sizes = this.fileSizes, keys = Object.keys(sizes)) {
