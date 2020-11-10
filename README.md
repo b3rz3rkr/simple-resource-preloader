@@ -352,4 +352,4 @@ Go back to [options section](#options)
 ---
 
 ## License 
-[MIT](/blob/master/LICENSE)
+[MIT](LICENSE)
