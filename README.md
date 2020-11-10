@@ -28,7 +28,7 @@ npm install simple-resources-preloader
 
 ## Basic Usage
 
-If you are using Webpack or another bundler you can just import it. If you don't use any bundlers go to [this section](#without-bundler-usage)  
+If you are using Webpack or another bundler you can just import it. If you don't use any bundlers go to [this section](#without-bundler-usage) . 
 
 ``` javascript
 import SRPreloader from 'simple-resources-preloader';
@@ -291,10 +291,10 @@ preloader.noAccess - Number of loading failed files
 
 preloader.options - Object contains current options
 
-preloader.percents - Number from 0 to 100 how much is loaded
+preloader.percents - Number from 0 to 100 loaded progress
 
 ## Without bundler usage  
-If you want to use it as separate file without bundler you need to copy 'SimpleResourcePreloader.js' or 'SimpleResourcePreloader.min.js' to your project folder and add type="module" attribute to your script file.  
+If you want to use it as separate file without any bundler you need to copy 'SimpleResourcePreloader.js' or 'SimpleResourcePreloader.min.js' to your project folder and add type="module" attribute to your script file.  
 **Be careful [some browsers](https://caniuse.com/es6-module-dynamic-import) still can't import files, so you still need a bundler or transpiler to support those browsers or use [ES5 version](#es5-usage).**
 
 ```html
