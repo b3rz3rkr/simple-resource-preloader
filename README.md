@@ -20,7 +20,7 @@ If you need IE support you need to transpile code to ES5 with Babel or other tra
 
 ## Installation
 
-``` 
+```
 npm install simple-resources-preloader
 ```
 
@@ -50,12 +50,12 @@ preloader.preload();
 
 You can use styleVar option value in css code
 
-```css
+``` css
 .preloader::before {
     transition: width 0.1s;
     width:var(--preloader-progress);
 }
-``` 
+```
 
 ## Options
 
@@ -170,7 +170,7 @@ document.addEventListener('preloadprogress', e => {
 
 Start preloader
 
-```javascript 
+``` javascript 
 preloader.preload();
 ```
 
@@ -180,7 +180,7 @@ Triggering custom event on target with additional details
 
 Acceptable properties eventName type is string, details type is object
  
-```javascript
+``` javascript
 const
     eventName = 'customEvent', 
     details = {
@@ -193,25 +193,25 @@ preloader.triggerEvent(eventName, details);
 
 Hiding DOM element stored in preloader.
 
-```javascript
+``` javascript
 preloader.hidePreloader();
-``` 
+```
 
 ---
 
 Show DOM element stored in preloader if it was hidden with 'hidePreloader()'.
 
-```javascript
+``` javascript
 preloader.showPreloader();
-``` 
+```
 
 ---
 
 Update progress elements stored in progress.
 
-```javascript
+``` javascript
 preloader.updateProgress();
-``` 
+```
 
 ### Getters and setters
 
@@ -219,7 +219,7 @@ Set and get options parameters.
 
 *See [options](#options) section for details.*
 
-```javascript
+``` javascript
 const defaultOptions = preloader.defaultOptions; //Get options object used by default
 
 preloader.files = ['path/to/file1.ext', 'path/to/file2.ext'];
@@ -241,7 +241,7 @@ preloader.speedTimeout = '250';
 const speedTimeout = preloader.speedTimeout; //Get number value even if string is stored to options, if value is invalid returns default value
 ```
 
-```javascript
+``` javascript
 // main callback
 preloader.cbParams = [1, 'a'];
 const cbParams = preloader.cbParams;
@@ -253,7 +253,7 @@ preloader.callback = (a, b) => {
 const callback = preloader.callback; 
 ```
 
-```javascript
+``` javascript
 //error callback
 preloader.ifErrorParams = [1, 'a'];
 const ifErrorParams = preloader.ifErrorParams;
@@ -266,7 +266,7 @@ preloader.ifError = (error, a, b) => {
 const ifError = preloader.ifError; 
 ```
 
-```javascript
+``` javascript
 //percents changing callback
 preloader.onProgressParams = [1, 'a'];
 const onProgressParams = preloader.onProgressParams;
@@ -277,7 +277,7 @@ preloader.onProgress = (progress, a, b) => {
     console.log(b);         //expected output – 'a'
 };
 const onProgress = preloader.onProgress; 
-``` 
+```
 
 ### Properties
 
@@ -297,7 +297,7 @@ preloader.percents - Number from 0 to 100 loaded progress
 If you want to use it as separate file without any bundler you need to copy 'SimpleResourcePreloader.js' or 'SimpleResourcePreloader.min.js' to your project folder and add type="module" attribute to your script file.  
 **Be careful [some browsers](https://caniuse.com/es6-module-dynamic-import) still can't import files, so you still need a bundler or transpiler to support those browsers or use [ES5 version](#es5-usage).**
 
-```html
+``` html
 <script type="module" src="./js/script.js"></script>
 ```
 To import it you can use code like this in you script
@@ -326,7 +326,7 @@ Go back to [options section](#options)
 
 You need to connect plugin script 'SimpleResourcePreloader.es5.js' or 'SimpleResourcePreloader.es5.min.js' before your main script
 
-```html
+``` html
 <!--script src="./js/SimpleResourcePreloader.es5.js"></script-->
 <!-- or minified version -->
 <script src="./js/SimpleResourcePreloader.es5.min.js"></script>
@@ -335,7 +335,7 @@ You need to connect plugin script 'SimpleResourcePreloader.es5.js' or 'SimpleRes
 
 To init preloader you need to create new object
 
-```javascript
+``` javascript
 var preloader = new SimpleResourcePreloader({
     files: ['./video/intro.mp4', './video/background.mp4']
 });
