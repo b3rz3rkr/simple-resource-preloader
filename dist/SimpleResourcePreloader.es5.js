@@ -108,7 +108,8 @@ var SimpleResourcePreloader = /*#__PURE__*/function () {
           _this2.triggerEvent(_this2.options.eventProgress, details);
 
           if (typeof _this2.onProgress === 'function') {
-            _this2.onProgress.apply(_this2, [percents].concat(_toConsumableArray(_this2.onProgressParams), [speed]));
+            _this2.onProgress.apply(_this2, [percents].concat(_toConsumableArray(_this2.onProgressParams), [speed])); //toDo move speed param to second position on major update
+
           }
         }
       };
@@ -221,10 +222,9 @@ var SimpleResourcePreloader = /*#__PURE__*/function () {
         }
 
         return speed;
-      },
-          speed = getSpeed(diff, timeDiff);
+      };
 
-      return speed;
+      return getSpeed(diff, timeDiff);
     }
   }, {
     key: "totalLoaded",
