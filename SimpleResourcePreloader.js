@@ -77,7 +77,7 @@ export default class SimpleResourcePreloader {
             }
 
             const percents = this.__percentageCalc();
-            if (percents !== this.percents) {
+            if (percents !== this.percents) { //todo add total files loaded status
                 const speed = this.fileSizes.speed,
                     details = this.__getDetails({value: percents, speed});
                 this.percents = percents;
